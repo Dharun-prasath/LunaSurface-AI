@@ -25,7 +25,7 @@ const Layout = () => {
                 <div style={styles.navbarRight}>
                     <ul style={styles.navList}>
                         <li style={styles.navItem}> Home</li>
-                        <li style={styles.navItem}>ℹ️ About</li>
+                        <li style={styles.navItem}>ℹ About</li>
                         <li style={styles.navItem}> Services</li>
                     </ul>
                     <button style={styles.detectButton}>Detect</button>
@@ -40,7 +40,7 @@ const Layout = () => {
                     <div style={styles.mobileMenu}>
                         <ul style={styles.mobileNavList}>
                             <li style={styles.mobileNavItem}> Home</li>
-                            <li style={styles.mobileNavItem}>ℹ️ About</li>
+                            <li style={styles.mobileNavItem}>About</li>
                             <li style={styles.mobileNavItem}> Services</li>
                         </ul>
                     </div>
@@ -73,19 +73,10 @@ const Layout = () => {
 
             {/* 🔗 Footer */}
             <footer style={styles.footer}>
-                <div style={styles.footerLinks}>
-                    <a href="#" style={styles.footerLink}>Home</a>
-                    <a href="#" style={styles.footerLink}>About</a>
-                    <a href="#" style={styles.footerLink}>Services</a>
-                    <a href="#" style={styles.footerLink}>Contact</a>
-                </div>
-                <div style={styles.footerSocial}>
-                    <a href="#" style={styles.socialLink}>Twitter</a>
-                    <a href="#" style={styles.socialLink}>GitHub</a>
-                    <a href="#" style={styles.socialLink}>Email</a>
-                </div>
                 <div style={styles.footerText}>
+                    <center>
                     © {new Date().getFullYear()} LunaSurface AI. All rights reserved.
+                    </center>
                 </div>
             </footer>
         </div>
@@ -119,9 +110,9 @@ const styles = {
 
     navbar: {
         background: 'rgba(28, 30, 38, 0.25)',
-        backdropFilter: 'blur(10px)',
+        backdropFilter: 'blur(5 px)',
         WebkitBackdropFilter: 'blur(10px)',
-        borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+        borderBottom: '0px solid rgba(255, 255, 255, 0.1)',
         boxShadow: '0 4px 30px rgba(0, 0, 0, 0.3)',
         padding: '10px 20px',
         display: 'flex',
@@ -200,9 +191,9 @@ const styles = {
 
     sidebar: {
         background: 'rgba(28, 30, 38, 0.25)',
-        backdropFilter: 'blur(10px)',
-        WebkitBackdropFilter: 'blur(10px)',
-        width: '250px',
+        backdropFilter: 'blur(5px)',
+        WebkitBackdropFilter: 'blur(1px)',
+        width: '150px',
         minHeight: 'calc(100vh - 60px)',
         transition: 'width 0.3s ease',
         borderRight: '1px solid rgba(255, 255, 255, 0.1)',
@@ -211,17 +202,17 @@ const styles = {
 
     sidebarCollapsed: {
         background: 'rgba(28, 30, 38, 0.5)',
-        backdropFilter: 'blur(16px)',
-        WebkitBackdropFilter: 'blur(16px)',
+        backdropFilter: 'blur(5px)',
+        WebkitBackdropFilter: 'blur(1px)',
         width: '60px',
         minHeight: 'calc(100vh - 60px)',
         transition: 'width 0.3s ease',
-        borderRight: '1px solid rgba(255,255,255,0.06)',
+        borderRight: '0px solid rgba(255,255,255,0.06)',
     },
 
     sidebarToggle: {
         backgroundColor: 'transparent',
-        backdropFilter: 'blur(10px)',
+        backdropFilter: 'blur(5px)',
         border: 'none',
         color: '#fff',
         fontSize: '1.5rem',
@@ -232,7 +223,7 @@ const styles = {
     sidebarList: { listStyle: 'none', padding: '10px 0', margin: 0 },
 
     sidebarItem: {
-        padding: '10px 20px',
+        padding: '10px 10px',
         cursor: 'pointer',
         display: 'flex',
         alignItems: 'center',
@@ -243,10 +234,10 @@ const styles = {
     mainContent: {
         flex: 1,
         padding: '20px',
-        backgroundColor: 'rgba(0, 0, 0, 0.01)', // Ultra transparent
-        backdropFilter: 'blur(10px)',
+        backgroundColor: 'rgba(0, 0, 0, 0.50)', // Ultra transparent
+        backdropFilter: 'blur(5px)',
         WebkitBackdropFilter: 'blur(10px)',
-        borderRadius: '20px',
+        borderRadius: '1px',
         margin: 'none',
         border: '0px solid rgba(255, 255, 255, 0.12)',
         boxShadow: '0 8px 50px rgba(0, 0, 0, 0.4)',
@@ -254,40 +245,16 @@ const styles = {
 
 
 
-    footer: {
-        background: 'rgba(28, 30, 38, 0.25)',
-        backdropFilter: 'blur(10px)',
-        WebkitBackdropFilter: 'blur(10px)',
-        padding: '20px',
-        borderTop: '1px solid rgba(255, 255, 255, 0.1)',
-        boxShadow: '0 -4px 30px rgba(0, 0, 0, 0.3)',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '10px',
-    },
-
-    footerLinks: {
-        display: 'flex',
-        justifyContent: 'center',
-        gap: '20px',
-    },
-
-    footerLink: { color: '#aaa', textDecoration: 'none' },
-
-    footerSocial: {
-        display: 'flex',
-        justifyContent: 'center',
-        gap: '20px',
-    },
-
-    socialLink: {
-        color: '#aaa',
-        textDecoration: 'none',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '8px',
-    },
-
+  footer: {
+    background: 'rgba(255, 255, 255, 0.05)',
+    backdropFilter: 'blur(5px)',
+    padding: '5px',
+    borderTop: '0px solid rgba(255, 255, 255, 0.1)',
+    boxShadow: '0 -4px 10px rgba(0, 0, 0, 0.3)',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '10px',
+  },
     footerText: { color: '#888', fontSize: '0.9rem' },
 };
 

@@ -6,7 +6,6 @@ import jarvisSoundSrc from './jarvis-ui.wav';
 const jarvisSound = new Audio(jarvisSoundSrc);
 
 const Dashboard = () => {
-  const [showPanel, setShowPanel] = useState(false);
   const [stars, setStars] = useState([]);
   const [animateStars, setAnimateStars] = useState(true);
 
@@ -22,7 +21,6 @@ const Dashboard = () => {
   }, []);
 
   useEffect(() => {
-    // Inject twinkle keyframes once
     const style = document.createElement('style');
     style.textContent = `
       @keyframes twinkle {
@@ -36,27 +34,21 @@ const Dashboard = () => {
     };
   }, []);
 
-  const handleMoonClick = () => {
-    jarvisSound.play();
-    setShowPanel(true);
-  };
-
-  const handleExploreClick = () => {
-    jarvisSound.play();
-  };
-
   const handleDatasetClick = () => {
     jarvisSound.play();
   };
 
-  const toggleStars = () => {
+  const handleMoonClick = () => {
     jarvisSound.play();
-    setAnimateStars((prev) => !prev);
+  };
+
+  const handleCardClick = () => {
+    jarvisSound.play();
   };
 
   return (
     <div style={styles.container}>
-      {/* Starfield */}
+      {/* Starry background */}
       <div style={styles.starContainer}>
         {stars.map((star) => (
           <span
@@ -80,45 +72,69 @@ const Dashboard = () => {
         <div style={styles.navRight}>
           <p style={styles.dashboardText}>Dashboard</p>
           <button style={styles.uploadButton} onClick={handleDatasetClick}>Upload Dataset</button>
-          
         </div>
       </div>
 
-      {/* Main Content */}
-      <div style={styles.mainContent}>
-        <div style={styles.leftColumn}>
+      {/* Main layout */}
+      <div style={styles.contentArea}>
+        {/* Left: Moon panel */}
+        <div style={styles.moonPanel}>
+          <p style={styles.greenDot}>🟢</p>
+          <p style={styles.chandranLabel}>Chandran</p>
           <img
             src="https://upload.wikimedia.org/wikipedia/commons/e/e1/FullMoon2010.jpg"
             alt="Moon"
             style={styles.moon}
             onClick={handleMoonClick}
           />
+          <div style={styles.alertsBox}>
+            <h3 style={styles.cardTitle}>Alerts !</h3>
+            <p style={styles.cardText}>Landslides - 5</p>
+            <p style={styles.cardText}>Boulders - 42</p>
+          </div>
         </div>
 
-        {showPanel && (
-          <div style={styles.rightColumn}>
-            <div style={styles.cardRow}>
-              <div style={styles.card}>
-                <img src={landslideImg} alt="Landslide" style={styles.cardImage} />
-                <h3 style={styles.cardTitle}>Landslides</h3>
-                <p style={styles.cardText}>Detected terrain irregularity.</p>
-                <button style={styles.button} onClick={handleExploreClick}>Explore</button>
-              </div>
-              <div style={styles.card}>
-                <img src={boulderImg} alt="Boulder" style={styles.cardImage} />
-                <h3 style={styles.cardTitle}>Boulders</h3>
-                <p style={styles.cardText}>Detected surface rock mass.</p>
-                <button style={styles.button} onClick={handleExploreClick}>Explore</button>
-              </div>
-            </div>
-          </div>
-        )}
+        {/* Middle: Detecting text */}
+        <div style={styles.detectingPanel}>
+          <h3 style={styles.cardTitle}>Detecting</h3>
+          <p style={styles.cardText}>
+            Landslides do occur on the Moon. These are primarily caused by impacts from space debris, meteor showers,
+            and radiation, leading to the weakening of crater walls and subsequent collapses.
+          </p>
+          <p style={styles.cardText}>
+            Landslides do occur on the Moon. These are primarily caused by impacts from space debris, meteor showers,
+            and radiation, leading to the weakening of crater walls and subsequent collapses.
+          </p>
+          <p style={styles.cardText}>
+            Landslides do occur on the Moon. These are primarily caused by impacts from space debris, meteor showers,
+            and radiation, leading to the weakening of crater walls and subsequent collapses.
+          </p>
+          <p style={styles.cardText}>
+            Landslides do occur on the Moon. These are primarily caused by impacts from space debris, meteor showers,
+            and radiation, leading to the weakening of crater walls and subsequent collapses.
+          </p>
+        </div>
+
+        {/* Right: Cards */}
+        <div style={styles.card} onClick={handleCardClick}>
+          <img src={landslideImg} alt="Landslide" style={styles.cardImage} />
+          <p style={styles.cardText}>
+            Landslides occur on the Moon due to impacts from meteor showers and radiation weakening the crust.
+          </p>
+          <hr />
+          <img src={boulderImg} alt="Boulder" style={styles.cardImage} />
+          <p style={styles.cardText}>
+            Boulders are often seen in craters, usually moved or displaced during landslide events.
+          </p>
+          <img src={boulderImg} alt="Boulder" style={styles.cardImage} />
+          <p style={styles.cardText}>
+            Boulders are often seen in craters.
+          </p>
+        </div>
       </div>
     </div>
   );
 };
-
-// ---------------------- Styles ------------------------
 
 const glow = '#aaa';
 
@@ -152,7 +168,7 @@ const styles = {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: '40px 60px',
+    padding: '30px 50px',
     borderBottom: `1px solid ${glow}33`,
   },
   logo: {
@@ -179,80 +195,110 @@ const styles = {
     fontWeight: 'bold',
     boxShadow: `0 0 10px ${glow}33`,
   },
-  mainContent: {
-    position: 'relative',
-    zIndex: 2,
-    color: 'white',
+  contentArea: {
     display: 'flex',
     padding: '60px 40px',
-    gap: '60px',
-    alignItems: 'flex-start',
-  },
-  leftColumn: {
-    flex: 1,
-    display: 'flex',
+    gap: '30px',
     justifyContent: 'center',
+    position: 'relative',
+    zIndex: 2,
+  },
+  moonPanel: {
+    position: 'absolute',
+    left: '40px',
+    top: '8px',
+    height: '650px',
+    width: '980px',
+    background: 'rgba(255, 255, 255, 0.05)',
+   
+    padding: '20px',
+    display: 'flex',
+    flexDirection: 'column',
     alignItems: 'center',
+    backdropFilter: 'blur(10px)',
+    boxShadow: `0 0 15px ${glow}22`,
+    color: 'white',
+  },
+  greenDot: {
+    position: 'absolute',
+    top: '15px',
+    left: '20px',
+    fontSize: '15px',
+    margin: 0,
+  },
+  chandranLabel: {
+    position: 'absolute',
+    top: '15px',
+    left: '50px',
+    fontWeight: 'bold',
+    margin: 0,
   },
   moon: {
-    marginTop: '35px',
-    width: '500px',
-    height: '500px',
-   
-    cursor: 'pointer',
+    position: 'absolute',
+    top: '80px',
+    left: '90px',
+    width: '430px',
+    height: '430px',
+    borderRadius: '50%',
+    boxShadow: `0 0 5px ${glow}`,
     objectFit: 'cover',
   },
-  rightColumn: {
-    flex: 2,
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
+  alertsBox: {
+    position: 'absolute',
+    top: '560px',
+    left: '0.1px',
+    height: '90px',
+    width: '250px',
+    padding: '10px',
+    background: 'rgba(0, 0, 0, 0.08)',
+    borderRadius: '8px',
+    textAlign: 'center',
   },
-  cardRow: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '30px',
-    alignItems: 'center',
+  detectingPanel: {
+    position: 'absolute',
+    left: '650px',
+    top: '70px',
+    width: '300px',
+    textAlign: 'center',
+    borderRadius: '12px',
+    padding: '20px',
+    color: 'white',
+    backdropFilter: 'blur(10px)',
   },
   card: {
+    position: 'absolute',
+    right: '40px',
+    top: '8px',
     width: '300px',
-    background: 'rgba(255, 255, 255, 0.04)',
-    border: `1px solid ${glow}22`,
-    borderRadius: '16px',
+    height: '650px',
+    background: 'rgba(255, 255, 255, 0.06)',
+    
     padding: '20px',
+    color: 'white',
     backdropFilter: 'blur(10px)',
-    boxShadow: `0 0 20px ${glow}22`,
+    boxShadow: `0 0 15px ${glow}22`,
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    cursor: 'pointer',
   },
   cardImage: {
     width: '100%',
     height: '150px',
-    borderRadius: '10px',
     objectFit: 'cover',
+    borderRadius: '10px',
     marginBottom: '12px',
   },
   cardTitle: {
     fontSize: '18px',
-    color: "white",
+    fontWeight: 'bold',
     marginBottom: '8px',
   },
   cardText: {
     fontSize: '14px',
     color: 'white',
-    marginBottom: '12px',
+    marginBottom: '10px',
     textAlign: 'center',
-  },
-  button: {
-    padding: '8px 12px',
-    border: `1px solid ${glow}`,
-    background: 'transparent',
-    color: glow,
-    borderRadius: '6px',
-    cursor: 'pointer',
-    fontWeight: 'bold',
-    boxShadow: `0 0 10px ${glow}22`,
   },
 };
 

@@ -128,13 +128,7 @@ const Dashboard = () => {
             <div style={styles.navbar}>
                 <h1 style={styles.logo}>LunaSurface AI</h1>
                 <div style={styles.navRight}>
-                    <button
-                        style={activeTab === 'dashboard' ? styles.activeTabButton : styles.tabButton}
-                        onClick={() => setActiveTab('dashboard')}
-                    >
-                        Dashboard
-                    </button>
-
+                    <h4>Dashboard</h4>
                     <button style={styles.uploadButton} onClick={handleDatasetClick}>
                         Upload Dataset
                     </button>
@@ -256,7 +250,7 @@ const getSeverityColor = (severity) => {
     }
 };
 
-const glow = 'rgba(1, 240, 240, 0.8)';
+const glow = '#a9e2ff';
 const panelBg = 'rgba(0, 0, 0, 0.6)';
 
 const styles = {
@@ -290,7 +284,6 @@ const styles = {
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '20px 40px',
-        borderBottom: `1px solid ${glow}`,
         background: 'rgba(0, 0, 0, 0.8)',
         backdropFilter: 'blur(1px)',
     },
@@ -298,7 +291,7 @@ const styles = {
         fontSize: '24px',
         fontWeight: 'bold',
         color: 'white',
-        textShadow: `0 0 10px ${glow}`,
+       
         margin: 0,
     },
     navRight: {
@@ -357,8 +350,7 @@ const styles = {
         display: 'flex',
         flexDirection: 'column',
         backdropFilter: 'blur(0px)',
-        border: `1px solid ${glow}33`,
-        boxShadow: `0 0 20px rgba(0, 0, 0, 0.5)`,
+       
     },
     statusIndicator: {
         display: 'flex',
@@ -420,8 +412,7 @@ const styles = {
         padding: '20px',
         overflowY: 'auto',
         backdropFilter: 'blur(0px)',
-        border: `1px solid ${glow}33`,
-        boxShadow: `0 0 20px rgba(0, 0, 0, 0.5)`,
+       
     },
     eventCard: {
         background: 'rgba(0, 0, 0, 0.3)',
@@ -487,8 +478,7 @@ const styles = {
         borderRadius: '12px',
         padding: '20px',
         backdropFilter: 'blur(0px)',
-        border: `1px solid ${glow}33`,
-        boxShadow: `0 0 20px rgba(0, 0, 0, 0.5)`,
+       
     },
     detectionInfo: {
         height: 'calc(100% - 40px)',

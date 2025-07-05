@@ -1,310 +1,533 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { OrbitControls, Stars, useTexture } from '@react-three/drei';
 import landslideImg from './images (1).jpeg';
 import boulderImg from './download (1).jpeg';
 import jarvisSoundSrc from './jarvis-ui.wav';
 
 const jarvisSound = new Audio(jarvisSoundSrc);
 
+const MoonModel = () => {
+    const moonRef = useRef();
+    const [moonTexture] = useTexture(['https://threejs.org/examples/textures/planets/moon_1024.jpg']);
+
+    useFrame(() => {
+        moonRef.current.rotation.y += 0.004;
+    });
+
+    return (
+        <mesh ref={moonRef}>
+            <sphereGeometry args={[1.5, 64, 64]} />
+            <meshStandardMaterial
+                map={moonTexture}
+                roughness={0.8}
+                metalness={0.1}
+            />
+        </mesh>
+    );
+};
+
 const Dashboard = () => {
-  const [stars, setStars] = useState([]);
-  const [animateStars, setAnimateStars] = useState(true);
+    const [stars, setStars] = useState([]);
+    const [animateStars, setAnimateStars] = useState(true);
+    const [activeTab, setActiveTab] = useState('dashboard');
+    const [expandedEvent, setExpandedEvent] = useState(null);
 
-  useEffect(() => {
-    const starsArray = Array.from({ length: 100 }).map((_, index) => ({
-      id: index,
-      top: Math.random() * 100,
-      left: Math.random() * 100,
-      size: Math.random() * 2 + 1,
-      delay: Math.random() * 10,
-    }));
-    setStars(starsArray);
-  }, []);
+    useEffect(() => {
+        const starsArray = Array.from({ length: 100 }).map((_, index) => ({
+            id: index,
+            top: Math.random() * 100,
+            left: Math.random() * 100,
+            size: Math.random() * 2 + 1,
+            delay: Math.random() * 10,
+        }));
+        setStars(starsArray);
+    }, []);
 
-  useEffect(() => {
-    const style = document.createElement('style');
-    style.textContent = `
+    useEffect(() => {
+        const style = document.createElement('style');
+        style.textContent = `
       @keyframes twinkle {
         0%, 100% { opacity: 0.3; transform: scale(1); }
         50% { opacity: 1; transform: scale(1.2); }
       }
     `;
-    document.head.appendChild(style);
-    return () => {
-      document.head.removeChild(style);
+        document.head.appendChild(style);
+        return () => {
+            document.head.removeChild(style);
+        };
+    }, []);
+
+    const handleDatasetClick = () => {
+        jarvisSound.play();
     };
-  }, []);
 
-  const handleDatasetClick = () => {
-    jarvisSound.play();
-  };
+    const handleMoonClick = () => {
+        jarvisSound.play();
+    };
 
-  const handleMoonClick = () => {
-    jarvisSound.play();
-  };
+    const handleCardClick = (eventId) => {
+        jarvisSound.play();
+        setExpandedEvent(expandedEvent === eventId ? null : eventId);
+    };
 
-  const handleCardClick = () => {
-    jarvisSound.play();
-  };
+    const events = [
+        {
+            id: 'LS32',
+            type: 'Landslide',
+            title: 'Landslide Detected: LS32',
+            severity: 'High',
+            location: 'Crater Aristarchus',
+            details: 'Major terrain shift detected in northern crater. Possible subsurface instability. Recommend immediate survey team dispatch.',
+            timestamp: '2 hours ago',
+            image: landslideImg
+        },
+        {
+            id: 'MB54',
+            type: 'Boulder',
+            title: 'Boulder Detected: MB54',
+            severity: 'Medium',
+            location: 'Mare Tranquillitatis',
+            details: 'Large boulder field detected with potential navigation hazards. Marked for rover path planning avoidance.',
+            timestamp: '4 hours ago',
+            image: boulderImg
+        },
+        {
+            id: 'BB55',
+            type: 'Boulder',
+            title: 'Boulder Detected: BB55',
+            severity: 'Low',
+            location: 'Tycho Crater',
+            details: 'Isolated boulder detected. No immediate impact on operations. Added to long-term monitoring list.',
+            timestamp: '6 hours ago',
+            image: boulderImg
+        }
+    ];
 
-  return (
-    <div style={styles.container}>
-      {/* Starry background */}
-      <div style={styles.starContainer}>
-        {stars.map((star) => (
-          <span
-            key={star.id}
-            style={{
-              ...styles.star,
-              top: `${star.top}%`,
-              left: `${star.left}%`,
-              width: `${star.size}px`,
-              height: `${star.size}px`,
-              animation: animateStars ? `twinkle 2s infinite ease-in-out` : 'none',
-              animationDelay: `${star.delay}s`,
-            }}
-          />
-        ))}
-      </div>
+    return (
+        <div style={styles.container}>
+            {/* Starry background */}
+            <div style={styles.starContainer}>
+                {stars.map((star) => (
+                    <span
+                        key={star.id}
+                        style={{
+                            ...styles.star,
+                            top: `${star.top}%`,
+                            left: `${star.left}%`,
+                            width: `${star.size}px`,
+                            height: `${star.size}px`,
+                            animation: animateStars ? `twinkle 2s infinite ease-in-out` : 'none',
+                            animationDelay: `${star.delay}s`,
+                        }}
+                    />
+                ))}
+            </div>
 
-      {/* Navbar */}
-      <div style={styles.navbar}>
-        <h1 style={styles.logo}>LunaSurface AI</h1>
-        <div style={styles.navRight}>
-          <p style={styles.dashboardText}>Dashboard</p>
-          <button style={styles.uploadButton} onClick={handleDatasetClick}>Upload Dataset</button>
+            {/* Navbar */}
+            <div style={styles.navbar}>
+                <h1 style={styles.logo}>LunaSurface AI</h1>
+                <div style={styles.navRight}>
+                    <button
+                        style={activeTab === 'dashboard' ? styles.activeTabButton : styles.tabButton}
+                        onClick={() => setActiveTab('dashboard')}
+                    >
+                        Dashboard
+                    </button>
+                    <button
+                        style={activeTab === 'analysis' ? styles.activeTabButton : styles.tabButton}
+                        onClick={() => setActiveTab('analysis')}
+                    >
+                        Analysis
+                    </button>
+                    <button style={styles.uploadButton} onClick={handleDatasetClick}>
+                        Upload Dataset
+                    </button>
+                </div>
+            </div>
+
+            {/* Main layout */}
+            <div style={styles.contentArea}>
+                {/* Left: Moon panel */}
+                <div style={styles.moonPanel}>
+                    <div style={styles.statusIndicator}>
+                        <span style={styles.statusDot}>🟢</span>
+                        <span style={styles.statusText}>Chandran Base - Active Monitoring</span>
+                    </div>
+
+                    <div style={styles.moonCanvasContainer} onClick={handleMoonClick}>
+                        <Canvas
+                            camera={{ position: [0, 0, 5], fov: 45 }}
+                            style={styles.moonCanvas}
+                        >
+                            <ambientLight intensity={2.5} />
+                            <pointLight position={[10, 10, 10]} intensity={1} />
+                            <MoonModel />
+                            <OrbitControls
+                                enableZoom={false}
+                                enablePan={false}
+                                autoRotate
+                                autoRotateSpeed={0.5}
+                            />
+                        </Canvas>
+                    </div>
+
+                    <div style={styles.alertsBox}>
+                        <h3 style={styles.cardTitle}>Active Alerts</h3>
+                        <div style={styles.alertItem}>
+                            <span style={styles.alertLabel}>Landslides:</span>
+                            <span style={styles.alertValue}>5 detected</span>
+                        </div>
+                        <div style={styles.alertItem}>
+                            <span style={styles.alertLabel}>Boulders:</span>
+                            <span style={styles.alertValue}>42 detected</span>
+                        </div>
+                        <div style={styles.alertItem}>
+                            <span style={styles.alertLabel}>Seismic:</span>
+                            <span style={styles.alertValue}>3 events</span>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Middle: Events panel */}
+                <div style={styles.eventsPanel}>
+                    <h3 style={styles.panelTitle}>Recent Events</h3>
+                    {events.map((event) => (
+                        <div
+                            key={event.id}
+                            style={{
+                                ...styles.eventCard,
+                                borderLeft: `4px solid ${getSeverityColor(event.severity)}`
+                            }}
+                            onClick={() => handleCardClick(event.id)}
+                        >
+                            <div style={styles.eventHeader}>
+                                <div>
+                                    <h4 style={styles.eventTitle}>{event.title}</h4>
+                                    <p style={styles.eventLocation}>{event.location}</p>
+                                </div>
+                                <span style={{
+                                    ...styles.eventSeverity,
+                                    backgroundColor: getSeverityColor(event.severity)
+                                }}>
+                                    {event.severity}
+                                </span>
+                            </div>
+
+                            {expandedEvent === event.id && (
+                                <div style={styles.eventDetails}>
+                                    <img src={event.image} alt={event.type} style={styles.eventImage} />
+                                    <p style={styles.eventText}>{event.details}</p>
+                                    <p style={styles.eventTimestamp}>{event.timestamp}</p>
+                                </div>
+                            )}
+                        </div>
+                    ))}
+                </div>
+
+                {/* Right: Details panel */}
+                <div style={styles.detailsPanel}>
+                    <h3 style={styles.panelTitle}>Detection Details</h3>
+                    <div style={styles.detectionInfo}>
+                        <p style={styles.detectionText}>
+                            Landslides (LS) occur on the Moon primarily caused by impacts from space debris, meteor showers, and radiation exposure weakening regolith structure.
+                        </p>
+                        <p style={styles.detectionText}>
+                            Boulders (MB/BB) are common lunar surface features, often ejected from impact craters or exposed by seismic activity.
+                        </p>
+                        <div style={styles.statsContainer}>
+                            <div style={styles.statItem}>
+                                <span style={styles.statValue}>87%</span>
+                                <span style={styles.statLabel}>Detection Accuracy</span>
+                            </div>
+                            <div style={styles.statItem}>
+                                <span style={styles.statValue}>14ms</span>
+                                <span style={styles.statLabel}>Avg. Response Time</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-
-      {/* Main layout */}
-      <div style={styles.contentArea}>
-        {/* Left: Moon panel */}
-        <div style={styles.moonPanel}>
-          <p style={styles.greenDot}>🟢</p>
-          <p style={styles.chandranLabel}>Chandran</p>
-          <img
-            src="https://upload.wikimedia.org/wikipedia/commons/e/e1/FullMoon2010.jpg"
-            alt="Moon"
-            style={styles.moon}
-            onClick={handleMoonClick}
-          />
-          <div style={styles.alertsBox}>
-            <h3 style={styles.cardTitle}>Alerts !</h3>
-            <p style={styles.cardText}>Landslides - 5</p>
-            <p style={styles.cardText}>Boulders - 42</p>
-          </div>
-        </div>
-
-        {/* Middle: Detecting text */}
-        <div style={styles.detectingPanel}>
-          <h3 style={styles.cardTitle}>Detecting</h3>
-          <p style={styles.cardText}>
-            Landslides Detected : LS32 do occur on the Moon. These are primarily caused by impacts from space debris, meteor showers,
-            and radiation.
-          </p>
-          <p style={styles.cardText}>
-           Boulder Detected : MB54 do occur on the Moon. These are primarily caused by impacts from space debris, meteor showers,
-            and radiation.
-          </p>
-          <p style={styles.cardText}>
-            Boulder Detected : BB55 do occur on the Moon. These are primarily caused by impacts from space debris, meteor showers,
-            and radiation.
-          </p>
-            <p style={styles.cardText}>
-            Landslides Detected : LS33 do occur on the Moon. These are primarily caused by impacts from space debris, meteor showers,
-            and radiation.
-          </p>
-          <p style={styles.cardText}>
-            Boulder Detected : BB55 do occur on the Moon. These are primarily caused by impacts from space debris, meteor showers,
-            and radiation.
-          </p>
-           
-        </div>
-
-        {/* Right: Cards */}
-        <div style={styles.card} onClick={handleCardClick}>
-          <img src={landslideImg} alt="Landslide" style={styles.cardImage} />
-          <p style={styles.cardText}>
-          Landslides : LS32 - Landslides occur on the Moon due to impacts from meteor showers.
-          </p>
-          <hr />
-          <img src={boulderImg} alt="Boulder" style={styles.cardImage} />
-          <p style={styles.cardText}>
-          Boulder : MB54 - Boulders are often seen in craters. 
-          </p>
-          <img src={boulderImg} alt="Boulder" style={styles.cardImage} />
-          <p style={styles.cardText}>
-          Boulder : BB55 - Boulders are often seen in craters.
-          </p>
-        </div>
-      </div>
-    </div>
-  );
+    );
 };
 
-const glow = '#aaa';
+const getSeverityColor = (severity) => {
+    switch (severity) {
+        case 'High': return '#ff4d4d';
+        case 'Medium': return '#ffa64d';
+        case 'Low': return '#4dffb8';
+        default: return '#4d8cff';
+    }
+};
+
+const glow = 'rgba(19, 185, 214, 0.8)';
+const panelBg = 'rgba(0, 0, 0, 0.6)';
 
 const styles = {
-  container: {
-    backgroundColor: 'black',
-    minHeight: '100vh',
-    color: 'white',
-    fontFamily: 'Orbitron, Poppins, sans-serif',
-    overflow: 'hidden',
-    position: 'relative',
-  },
-  starContainer: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
-    zIndex: 0,
-  },
-  star: {
-    position: 'absolute',
-    backgroundColor: 'white',
-    borderRadius: '50%',
-    boxShadow: '0 0 6px white',
-    zIndex: 0,
-  },
-  navbar: {
-    position: 'relative',
-    zIndex: 2,
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: '30px 50px',
-    borderBottom: `1px solid ${glow}33`,
-  },
-  logo: {
-    fontSize: '24px',
-    fontWeight: 'bold',
-    color: 'white',
-  },
-  navRight: {
-    display: 'flex',
-    gap: '20px',
-    alignItems: 'center',
-  },
-  dashboardText: {
-    fontSize: '16px',
-    color: 'white',
-  },
-  uploadButton: {
-    padding: '8px 14px',
-    border: `1px solid ${glow}`,
-    background: 'transparent',
-    color: glow,
-    borderRadius: '6px',
-    cursor: 'pointer',
-    fontWeight: 'bold',
-    boxShadow: `0 0 10px ${glow}33`,
-  },
-  contentArea: {
-    display: 'flex',
-    padding: '60px 40px',
-    gap: '30px',
-    justifyContent: 'center',
-    position: 'relative',
-    zIndex: 2,
-  },
-  moonPanel: {
-    position: 'absolute',
-    left: '40px',
-    top: '8px',
-    height: '650px',
-    width: '980px',
-    background: 'rgba(255, 255, 255, 0.05)',
-   
-    padding: '20px',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    backdropFilter: 'blur(10px)',
-    boxShadow: `0 0 15px ${glow}22`,
-    color: 'white',
-  },
-  greenDot: {
-    position: 'absolute',
-    top: '15px',
-    left: '20px',
-    fontSize: '15px',
-    margin: 0,
-  },
-  chandranLabel: {
-    position: 'absolute',
-    top: '15px',
-    left: '50px',
-    fontWeight: 'bold',
-    margin: 0,
-  },
-  moon: {
-    position: 'absolute',
-    top: '80px',
-    left: '90px',
-    width: '430px',
-    height: '430px',
-    borderRadius: '50%',
-    boxShadow: `0 0 5px ${glow}`,
-    objectFit: 'cover',
-  },
-  alertsBox: {
-    position: 'absolute',
-    top: '560px',
-    left: '0.1px',
-    height: '90px',
-    width: '250px',
-    padding: '10px',
-    background: 'rgba(0, 0, 0, 0.08)',
-    borderRadius: '8px',
-    textAlign: 'center',
-  },
-  detectingPanel: {
-    position: 'absolute',
-    left: '650px',
-    top: '70px',
-    width: '300px',
-    textAlign: 'center',
-    borderRadius: '12px',
-    padding: '20px',
-    color: 'white',
-    backdropFilter: 'blur(10px)',
-  },
-  card: {
-    position: 'absolute',
-    right: '40px',
-    top: '8px',
-    width: '300px',
-    height: '650px',
-    background: 'rgba(255, 255, 255, 0.06)',
-    
-    padding: '20px',
-    color: 'white',
-    backdropFilter: 'blur(10px)',
-    boxShadow: `0 0 15px ${glow}22`,
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    cursor: 'pointer',
-  },
-  cardImage: {
-    width: '100%',
-    height: '150px',
-    objectFit: 'cover',
-    borderRadius: '10px',
-    marginBottom: '12px',
-  },
-  cardTitle: {
-    fontSize: '18px',
-    fontWeight: 'bold',
-    marginBottom: '8px',
-  },
-  cardText: {
-    fontSize: '14px',
-    color: 'white',
-    marginBottom: '10px',
-    textAlign: 'center',
-  },
+    container: {
+        backgroundColor: 'black',
+        minHeight: '100vh',
+        color: 'white',
+        fontFamily: '"Orbitron", "Poppins", sans-serif',
+        overflow: 'hidden',
+        position: 'relative',
+    },
+    starContainer: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        zIndex: 0,
+    },
+    star: {
+        position: 'absolute',
+        backgroundColor: 'white',
+        borderRadius: '50%',
+        boxShadow: '0 0 6px white',
+        zIndex: 0,
+    },
+    navbar: {
+        position: 'relative',
+        zIndex: 2,
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: '20px 40px',
+        borderBottom: `1px solid ${glow}`,
+        background: 'rgba(0, 0, 0, 0.8)',
+        backdropFilter: 'blur(1px)',
+    },
+    logo: {
+        fontSize: '24px',
+        fontWeight: 'bold',
+        color: 'white',
+        textShadow: `0 0 10px ${glow}`,
+        margin: 0,
+    },
+    navRight: {
+        display: 'flex',
+        gap: '15px',
+        alignItems: 'center',
+    },
+    tabButton: {
+        padding: '8px 16px',
+        border: 'none',
+        background: 'transparent',
+        color: 'rgba(255, 255, 255, 0.7)',
+        cursor: 'pointer',
+        fontWeight: 'bold',
+        fontSize: '14px',
+    },
+    activeTabButton: {
+        padding: '8px 16px',
+        border: 'none',
+        background: 'rgba(0, 216, 255, 0.2)',
+        color: 'white',
+        cursor: 'pointer',
+        fontWeight: 'bold',
+        fontSize: '14px',
+        borderRadius: '4px',
+    },
+    uploadButton: {
+        padding: '8px 16px',
+        border: `1px solid ${glow}`,
+        background: 'transparent',
+        color: glow,
+        borderRadius: '4px',
+        cursor: 'pointer',
+        fontWeight: 'bold',
+        fontSize: '14px',
+        boxShadow: `0 0 10px ${glow}33`,
+        transition: 'all 0.3s ease',
+        ':hover': {
+            background: 'rgba(0, 216, 255, 0.1)',
+        },
+    },
+    contentArea: {
+        display: 'flex',
+        padding: '20px',
+        gap: '20px',
+        height: 'calc(100vh - 80px)',
+        position: 'relative',
+        zIndex: 1,
+    },
+    moonPanel: {
+        flex: 1,
+        maxWidth: '400px',
+        background: panelBg,
+        borderRadius: '12px',
+        padding: '20px',
+        display: 'flex',
+        flexDirection: 'column',
+        backdropFilter: 'blur(0px)',
+        border: `1px solid ${glow}33`,
+        boxShadow: `0 0 20px rgba(0, 0, 0, 0.5)`,
+    },
+    statusIndicator: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '10px',
+        marginBottom: '20px',
+    },
+    statusDot: {
+        fontSize: '12px',
+    },
+    statusText: {
+        fontSize: '14px',
+        fontWeight: '500',
+    },
+    moonCanvasContainer: {
+        flex: 1,
+        borderRadius: '8px',
+        overflow: 'hidden',
+        marginBottom: '20px',
+        cursor: 'pointer',
+        position: 'relative',
+    },
+    moonCanvas: {
+        width: '100%',
+        height: '100%',
+        background: 'transparent',
+      
+    },
+    alertsBox: {
+        background: 'rgba(0, 0, 0, 0.3)',
+        borderRadius: '8px',
+        padding: '15px',
+    },
+    panelTitle: {
+        fontSize: '18px',
+        fontWeight: 'bold',
+        margin: '0 0 15px 0',
+        color: glow,
+        textShadow: `0 0 8px ${glow}33`,
+    },
+    alertItem: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        marginBottom: '8px',
+    },
+    alertLabel: {
+        fontSize: '14px',
+        color: 'rgba(255, 255, 255, 0.8)',
+    },
+    alertValue: {
+        fontSize: '14px',
+        fontWeight: 'bold',
+    },
+    eventsPanel: {
+        flex: 1,
+        maxWidth: '400px',
+        background: panelBg,
+        borderRadius: '12px',
+        padding: '20px',
+        overflowY: 'auto',
+        backdropFilter: 'blur(0px)',
+        border: `1px solid ${glow}33`,
+        boxShadow: `0 0 20px rgba(0, 0, 0, 0.5)`,
+    },
+    eventCard: {
+        background: 'rgba(0, 0, 0, 0.3)',
+        borderRadius: '8px',
+        padding: '15px',
+        marginBottom: '15px',
+        cursor: 'pointer',
+        transition: 'all 0.3s ease',
+        ':hover': {
+            transform: 'translateY(-2px)',
+            boxShadow: `0 5px 15px rgba(0, 0, 0, 0.3)`,
+        },
+    },
+    eventHeader: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: '10px',
+    },
+    eventTitle: {
+        fontSize: '16px',
+        fontWeight: 'bold',
+        margin: '0 0 5px 0',
+    },
+    eventLocation: {
+        fontSize: '12px',
+        color: 'rgba(255, 255, 255, 0.7)',
+        margin: 0,
+    },
+    eventSeverity: {
+        fontSize: '12px',
+        fontWeight: 'bold',
+        padding: '4px 8px',
+        borderRadius: '12px',
+        color: 'black',
+    },
+    eventDetails: {
+        marginTop: '10px',
+        paddingTop: '10px',
+        borderTop: `1px solid ${glow}33`,
+    },
+    eventImage: {
+        width: '100%',
+        height: '120px',
+        objectFit: 'cover',
+        borderRadius: '6px',
+        marginBottom: '10px',
+    },
+    eventText: {
+        fontSize: '14px',
+        margin: '0 0 10px 0',
+        lineHeight: '1.5',
+    },
+    eventTimestamp: {
+        fontSize: '12px',
+        color: 'rgba(255, 255, 255, 0.6)',
+        margin: 0,
+    },
+    detailsPanel: {
+        flex: 1,
+        maxWidth: '400px',
+        background: panelBg,
+        borderRadius: '12px',
+        padding: '20px',
+        backdropFilter: 'blur(0px)',
+        border: `1px solid ${glow}33`,
+        boxShadow: `0 0 20px rgba(0, 0, 0, 0.5)`,
+    },
+    detectionInfo: {
+        height: 'calc(100% - 40px)',
+        overflowY: 'auto',
+    },
+    detectionText: {
+        fontSize: '14px',
+        lineHeight: '1.6',
+        margin: '0 0 15px 0',
+    },
+    statsContainer: {
+        display: 'flex',
+        gap: '15px',
+        marginTop: '20px',
+    },
+    statItem: {
+        flex: 1,
+        background: 'rgba(0, 0, 0, 0.3)',
+        borderRadius: '8px',
+        padding: '15px',
+        textAlign: 'center',
+    },
+    statValue: {
+        display: 'block',
+        fontSize: '24px',
+        fontWeight: 'bold',
+        color: glow,
+        marginBottom: '5px',
+    },
+    statLabel: {
+        display: 'block',
+        fontSize: '12px',
+        color: 'rgba(255, 255, 255, 0.7)',
+    },
 };
 
 export default Dashboard;

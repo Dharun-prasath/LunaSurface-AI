@@ -98,37 +98,42 @@ const Dashboard = () => {
         <div style={styles.detectingPanel}>
           <h3 style={styles.cardTitle}>Detecting</h3>
           <p style={styles.cardText}>
-            Landslides do occur on the Moon. These are primarily caused by impacts from space debris, meteor showers,
-            and radiation, leading to the weakening of crater walls and subsequent collapses.
+            Landslides Detected : LS32 do occur on the Moon. These are primarily caused by impacts from space debris, meteor showers,
+            and radiation.
           </p>
           <p style={styles.cardText}>
-            Landslides do occur on the Moon. These are primarily caused by impacts from space debris, meteor showers,
-            and radiation, leading to the weakening of crater walls and subsequent collapses.
+           Boulder Detected : MB54 do occur on the Moon. These are primarily caused by impacts from space debris, meteor showers,
+            and radiation.
           </p>
           <p style={styles.cardText}>
-            Landslides do occur on the Moon. These are primarily caused by impacts from space debris, meteor showers,
-            and radiation, leading to the weakening of crater walls and subsequent collapses.
+            Boulder Detected : BB55 do occur on the Moon. These are primarily caused by impacts from space debris, meteor showers,
+            and radiation.
+          </p>
+            <p style={styles.cardText}>
+            Landslides Detected : LS33 do occur on the Moon. These are primarily caused by impacts from space debris, meteor showers,
+            and radiation.
           </p>
           <p style={styles.cardText}>
-            Landslides do occur on the Moon. These are primarily caused by impacts from space debris, meteor showers,
-            and radiation, leading to the weakening of crater walls and subsequent collapses.
+            Boulder Detected : BB55 do occur on the Moon. These are primarily caused by impacts from space debris, meteor showers,
+            and radiation.
           </p>
+           
         </div>
 
         {/* Right: Cards */}
         <div style={styles.card} onClick={handleCardClick}>
           <img src={landslideImg} alt="Landslide" style={styles.cardImage} />
           <p style={styles.cardText}>
-            Landslides occur on the Moon due to impacts from meteor showers and radiation weakening the crust.
+          Landslides : LS32 - Landslides occur on the Moon due to impacts from meteor showers.
           </p>
           <hr />
           <img src={boulderImg} alt="Boulder" style={styles.cardImage} />
           <p style={styles.cardText}>
-            Boulders are often seen in craters, usually moved or displaced during landslide events.
+          Boulder : MB54 - Boulders are often seen in craters. 
           </p>
           <img src={boulderImg} alt="Boulder" style={styles.cardImage} />
           <p style={styles.cardText}>
-            Boulders are often seen in craters.
+          Boulder : BB55 - Boulders are often seen in craters.
           </p>
         </div>
       </div>

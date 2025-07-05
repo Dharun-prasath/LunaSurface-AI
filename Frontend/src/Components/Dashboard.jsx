@@ -134,12 +134,7 @@ const Dashboard = () => {
                     >
                         Dashboard
                     </button>
-                    <button
-                        style={activeTab === 'analysis' ? styles.activeTabButton : styles.tabButton}
-                        onClick={() => setActiveTab('analysis')}
-                    >
-                        Analysis
-                    </button>
+
                     <button style={styles.uploadButton} onClick={handleDatasetClick}>
                         Upload Dataset
                     </button>
@@ -157,14 +152,14 @@ const Dashboard = () => {
 
                     <div style={styles.moonCanvasContainer} onClick={handleMoonClick}>
                         <Canvas
-                            camera={{ position: [0, 0, 5], fov: 45 }}
+                            camera={{ position: [0, 0, 5], fov: 75 }}
                             style={styles.moonCanvas}
                         >
-                            <ambientLight intensity={2.5} />
+                            <ambientLight intensity={7.5} />
                             <pointLight position={[10, 10, 10]} intensity={1} />
                             <MoonModel />
                             <OrbitControls
-                                enableZoom={false}
+                                enableZoom={true}
                                 enablePan={false}
                                 autoRotate
                                 autoRotateSpeed={0.5}
@@ -261,7 +256,7 @@ const getSeverityColor = (severity) => {
     }
 };
 
-const glow = 'rgba(19, 185, 214, 0.8)';
+const glow = 'rgba(1, 240, 240, 0.8)';
 const panelBg = 'rgba(0, 0, 0, 0.6)';
 
 const styles = {

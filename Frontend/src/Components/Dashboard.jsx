@@ -17,7 +17,7 @@ const MoonModel = () => {
 
     return (
         <mesh ref={moonRef}>
-            <sphereGeometry args={[1, 64, 64]} /> {/* Reduced size */}
+            <sphereGeometry args={[1.65, 64, 64]} /> 
             <meshStandardMaterial
                 map={moonTexture}
                 roughness={0.8}

@@ -179,7 +179,7 @@ const Dashboard = () => {
                             camera={{ position: [0, 0, 5], fov: 45 }} // Adjusted FOV for smaller moon
                             style={styles.moonCanvas}
                         >
-                            <ambientLight intensity={7.5} />
+                            <ambientLight intensity={7.0} />
                             <pointLight position={[10, 10, 10]} intensity={1} />
                             <MoonModel />
                             <OrbitControls

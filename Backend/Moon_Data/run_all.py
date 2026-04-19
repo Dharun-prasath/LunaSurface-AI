@@ -21,4 +21,4 @@ if __name__ == "__main__":
     run_script(organize_script)
     run_script(generate_script)
     run_script(img_to_png_script)
-    print("\n🎉 All Steps Completed Successfully!")
+    print("\n🎉 All Steps Completed Successfully!")                     

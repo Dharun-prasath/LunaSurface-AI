@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import rasterio
 
 # -------- CONFIG --------
-PATCH_FOLDER = "/Users/pheonix/Documents/Minor Project/LunaSurface-AI/Backend/Moon_Data/patches/ohr_001"
+PATCH_FOLDER = "/Users/pheonix/Documents/Minor Project/LunaSurface-AI/Backend/Moon_Data/patches/ohr_000"
 PATCH_SIZE = 512
 
 # -------- DETECT PATCH TYPE --------

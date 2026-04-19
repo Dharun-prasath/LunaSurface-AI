@@ -18,7 +18,7 @@ def get_img_size_from_metadata(folder_path):
         if file.endswith(".xml") and "meta" in file.lower():
             xml_path = os.path.join(folder_path, file)
             try:
-                tree = ET.parse(xml_path)
+                tree = ET.parse(xml_path) 
                 root = tree.getroot()
                 ns = {'pds': 'http://pds.nasa.gov/pds4/pds/v1'}
                 width = height = None

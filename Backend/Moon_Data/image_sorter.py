@@ -10,10 +10,9 @@ PATCH_FOLDER = "/Users/pheonix/Documents/Minor Project/LunaSurface-AI/Backend/Mo
 OUTPUT_BASE = "/Users/pheonix/Documents/Minor Project/LunaSurface-AI/Backend/Moon_Data/ManualSelected"
 
 CRATER_DIR = os.path.join(OUTPUT_BASE, "crater_images")
-SLOPE_DIR = os.path.join(OUTPUT_BASE, "slope_images")
-BOULDER_DIR = os.path.join(OUTPUT_BASE, "boulder_images")
+MOUNTAIN_DIR = os.path.join(OUTPUT_BASE, "mountain_images")
 
-for folder in [CRATER_DIR, SLOPE_DIR, BOULDER_DIR]:
+for folder in [CRATER_DIR, MOUNTAIN_DIR]:
     os.makedirs(folder, exist_ok=True)
 
 # -------- LOAD PATCHES --------
@@ -47,13 +46,11 @@ def show_image(i):
     # overlay counters
     overlay = (
         f"Crater: {count_images(CRATER_DIR)}\n"
-        f"Mountain: {count_images(SLOPE_DIR)}\n"
-        f"Boulder: {count_images(BOULDER_DIR)}\n\n"
+        f"Mountain: {count_images(MOUNTAIN_DIR)}\n\n"
         "Keys:\n"
         "→ next | ← prev\n"
         "c = crater\n"
         "m = mountain\n"
-        "b = boulder\n"
         "esc = exit"
     )
 
@@ -88,14 +85,8 @@ def on_key(event):
         show_image(index)
 
     elif event.key == 'm':
-        shutil.copy(img_path, SLOPE_DIR)
+        shutil.copy(img_path, MOUNTAIN_DIR)
         print("Saved to mountain")
-        index = (index + 1) % len(patch_paths)
-        show_image(index)
-
-    elif event.key == 'b':
-        shutil.copy(img_path, BOULDER_DIR)
-        print("Saved to boulder")
         index = (index + 1) % len(patch_paths)
         show_image(index)
 
